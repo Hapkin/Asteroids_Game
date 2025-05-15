@@ -23,7 +23,7 @@ class Asteroid(CircleShape):
         hit_asteroid=super().collision(other_circle)
         
         if(hit_asteroid):
-            print("Asteroid collision")
+            #print("Asteroid collision")
             
             direction = self.position - other_circle.position
             if direction.length() != 0:

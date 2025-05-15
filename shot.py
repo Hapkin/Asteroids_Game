@@ -26,7 +26,10 @@ class Shot(CircleShape):
         if(hit_asteroid):
             self.kill()
             if(asteroid.radius > ASTEROID_MIN_RADIUS):
-                return "hit"
+                return ("hit",20)
             else:
                 asteroid.kill()
+                return("kill",10)
+        else:
+            return("",0)
             

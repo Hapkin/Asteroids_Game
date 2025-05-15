@@ -10,6 +10,7 @@ class Player(CircleShape):
         self.drag =0.95
         self.shots_group = group_shots
         self.time_since_last_shot=0
+        self.score = 0
         #print(f"the player is created. position: {x},{y}")
         
     def triangle(self):

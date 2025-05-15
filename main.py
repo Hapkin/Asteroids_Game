@@ -22,13 +22,18 @@ def main():
         print("Starting Asteroids!")
         print(f"Screen width: {c.SCREEN_WIDTH}")
         print(f"Screen height: {c.SCREEN_HEIGHT}")
+        bg_image = pygame.image.load('black_space.jpg')
+
+        pygame.init()
         
-        pygame.init() 
+        
         clock=pygame.time.Clock()
 
         dt=0
         screen = pygame.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
-
+        
+        pygame.display.set_caption('Keen in between worlds')
+        
         x=(c.SCREEN_WIDTH/2)
         y =(c.SCREEN_HEIGHT/2)
         #create groups
@@ -70,8 +75,13 @@ def main():
             ### end of exit
             
 
-            screen.fill("black")
+            #screen.fill("black")
+            screen.blit(bg_image , (0,0))
             dt=clock.tick(60) /1000
+            #score text
+            font = pygame.font.Font(None, 36)
+            
+
 
             ##first we just drew the player -> later we updated to draw every object in the groups
             #my_player.draw(screen)
@@ -88,7 +98,10 @@ def main():
                 my_shot.draw(screen)
                 
                 
-            
+            if((my_asteroidfield.active_asteroids)<=1):
+                my_asteroidfield.number_of_asteroids=0
+                my_asteroidfield.update(dt)
+
             #check if player hits any asteroids
             for asteroid in group_asteroids:
                 my_player.collision(asteroid)
@@ -99,13 +112,24 @@ def main():
                     asteroid.collision(asteroid2)
                 #check if you shot something!
                 for my_shot in group_shots:
+                    #returns (None, 20) or (hit, 10)
                     asteroid_hit=my_shot.collision(asteroid)
-                    if(asteroid_hit=="hit"):
+                    my_player.score+=asteroid_hit[1]
+                    #print(my_player.score)
+                    if(asteroid_hit[0]=="hit"):
                         random_angle=random.uniform(20,50)
                         my_asteroidfield.spawn((asteroid.radius-c.ASTEROID_MIN_RADIUS),asteroid.position,(asteroid.velocity.rotate(-random_angle))*1.2)
                         my_asteroidfield.spawn((asteroid.radius-c.ASTEROID_MIN_RADIUS),asteroid.position,(asteroid.velocity.rotate(+random_angle))*1.2)
+                        my_asteroidfield.active_asteroids+=1
                         asteroid.kill()
+                    elif(asteroid_hit[0]=="kill"):
+                        my_asteroidfield.active_asteroids-=1
+                        print(f"{my_asteroidfield.active_asteroids} - {my_asteroidfield.number_of_asteroids} ")
+                    
             
+
+            score_text = font.render(f"Score: {my_player.score}", True, (255, 255, 255))
+            screen.blit(score_text, (10, 10))
             #Einde van de loop!! 
             pygame.display.flip()
 
