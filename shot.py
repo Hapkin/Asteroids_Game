@@ -22,7 +22,11 @@ class Shot(CircleShape):
 
     def collision(self, asteroid):
         hit_asteroid=super().collision(asteroid)
-
+        
         if(hit_asteroid):
-            asteroid.kill()
             self.kill()
+            if(asteroid.radius > ASTEROID_MIN_RADIUS):
+                return "hit"
+            else:
+                asteroid.kill()
+            

@@ -4,6 +4,7 @@
 ## imports outside
 import pygame
 import sys
+import random
 ## imports from project
 import constants as c
 #from player import player => Classes Always Start Capitalized
@@ -98,8 +99,12 @@ def main():
                     asteroid.collision(asteroid2)
                 #check if you shot something!
                 for my_shot in group_shots:
-                    my_shot.collision(asteroid)
-                
+                    asteroid_hit=my_shot.collision(asteroid)
+                    if(asteroid_hit=="hit"):
+                        random_angle=random.uniform(20,50)
+                        my_asteroidfield.spawn((asteroid.radius-c.ASTEROID_MIN_RADIUS),asteroid.position,(asteroid.velocity.rotate(-random_angle))*1.2)
+                        my_asteroidfield.spawn((asteroid.radius-c.ASTEROID_MIN_RADIUS),asteroid.position,(asteroid.velocity.rotate(+random_angle))*1.2)
+                        asteroid.kill()
             
             #Einde van de loop!! 
             pygame.display.flip()
